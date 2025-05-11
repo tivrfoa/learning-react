@@ -1,0 +1,59 @@
+/* Add this to your App.css or a relevant CSS file */
+body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Center the game */
+  }
+  
+  .status {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .board-container {
+    position: relative; /* Important for positioning the line */
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #999; /* Optional: border around the whole board */
+  }
+  
+  .board-row {
+    display: flex;
+  }
+  
+  .square {
+    width: 100px;   /* IMPORTANT: Match this in getLineStyle */
+    height: 100px;  /* IMPORTANT: Match this in getLineStyle */
+    background: #fff;
+    border: 1px solid #999;
+    font-size: 50px; /* Increased font size for X/O */
+    font-weight: bold;
+    line-height: 100px; /* Vertically center X/O */
+    text-align: center;
+    margin-right: -1px; /* Collapse borders */
+    margin-top: -1px;   /* Collapse borders */
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  .square:focus {
+    outline: none;
+  }
+  
+  .winner-line {
+    /* Styles are applied dynamically via the 'style' prop in React */
+    /* You can add a default transition here if you like */
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out;
+  }
+  
+  button { /* Style for the reset button */
+    margin-top: 20px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+  }
