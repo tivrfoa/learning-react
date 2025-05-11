@@ -26,6 +26,7 @@ function checkDir(r, c, dr, dc, v) {
 }
 
 export default function Board() {
+  const [winner, setWinner] = useState(null);
   const [turn, setTurn] = useState('X');
   const [squares, setSquares] = useState(Array(9).fill(null));
   // The handleClick function creates a copy of the squares array (nextSquares) with the JavaScript slice() Array method. 
@@ -39,19 +40,26 @@ export default function Board() {
     // check winner
     const [r, c] = rowColumnMap[i];
     board[r][c] = v;
-    if (checkDir(0, c, 1, 0, v)) {
-      console.log('won vertical');
-    } else if (checkDir(r, 0, 0, 1, v)) {
-      console.log('won horizontal');
-    } else if (checkDir(0, 0, 1, 1, v)) {
-      console.log('won main diagonal');
-    } else if (checkDir(2, 0, -1, 1, v)) {
-      console.log('won opposite diagonal');
-    }
+    let result = (() => {
+      if (checkDir(0, c, 1, 0, v)) {
+        return v + ' won vertical';
+      } else if (checkDir(r, 0, 0, 1, v)) {
+        return v + ' won horizontal';
+      } else if (checkDir(0, 0, 1, 1, v)) {
+        return v + ' won main diagonal';
+      } else if (checkDir(2, 0, -1, 1, v)) {
+        return v + ' won opposite diagonal';
+      } else {
+        return null;
+      }
+    })();
+
+    setWinner(result);
   }
 
   return (
     <>
+      <div className="status">{winner}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
