@@ -72,38 +72,40 @@ export default function Board() {
     const { type, index } = winnerInfo.line;
     switch (type) {
       case 'horizontal':
+        // y always at (index + 0.5) / 3  → e.g. 1st row: (0+.5)/3=16.7%
         return (
           <line
-            x1={0}
-            y1={index * cellSize + cellSize / 2}
-            x2={size}
-            y2={index * cellSize + cellSize / 2}
+            x1="0%"        y1={`${(index + 0.5) * 33.333}%`}
+            x2="100%"      y2={`${(index + 0.5) * 33.333}%`}
           />
         );
       case 'vertical':
         return (
           <line
-            x1={index * cellSize + cellSize / 2}
-            y1={0}
-            x2={index * cellSize + cellSize / 2}
-            y2={size}
+            x1={`${(index + 0.5) * 33.333}%`}  y1="0%"
+            x2={`${(index + 0.5) * 33.333}%`}  y2="100%"
           />
         );
       case 'diag-main':
-        return <line x1={0} y1={0} x2={size} y2={size} />;
+        // top-left to bottom-right
+        return <line x1="0%" y1="0%" x2="100%" y2="100%" />;
       case 'diag-opp':
-        return <line x1={0} y1={size} x2={size} y2={0} />;
+        // bottom-left to top-right
+        return <line x1="0%" y1="100%" x2="100%" y2="0%" />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="board-container" style={{ position: 'relative', width: size, height: size }}>
+    <div
+      className="board-container"
+      style={{ position: 'relative', width: 300, height: 300 }}
+    >
       <svg
         className="line-overlay"
-        width={size}
-        height={size}
+        width="100%"        height="100%"
+        viewBox="0 0 100 100"
         style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
       >
         {renderLine()}
