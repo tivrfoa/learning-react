@@ -11,42 +11,65 @@
       margin: 0;
       padding: 1rem;
     }
+
     svg {
       background: white;
       border: 2px solid #ccc;
       margin-top: 1rem;
     }
-    #score {
+
+    #score, #timer {
       font-size: 1.5rem;
-      margin-top: 1rem;
+      margin: 0.5rem;
     }
+
     .target {
       cursor: pointer;
       transition: transform 0.1s;
     }
+
     .target:active {
       transform: scale(0.95);
+    }
+
+    #game-over {
+      font-size: 2rem;
+      color: red;
+      display: none;
     }
   </style>
 </head>
 <body>
 
   <h1>🎯 Click the Target!</h1>
-  <p>Click the red circle as many times as you can.</p>
   <div id="score">Score: 0</div>
+  <div id="timer">Time Left: 10s</div>
+  <div id="game-over">⏱ Game Over!</div>
 
   <svg id="game" width="400" height="400" viewBox="0 0 400 400">
     <circle id="target" class="target" cx="200" cy="200" r="20" fill="red" />
   </svg>
 
+  <!-- Sound Effects -->
+  <audio id="click-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+  <audio id="end-sound" src="https://www.soundjay.com/button/sounds/button-10.mp3" preload="auto"></audio>
+
   <script>
     const target = document.getElementById("target");
     const scoreDisplay = document.getElementById("score");
-    const svg = document.getElementById("game");
+    const timerDisplay = document.getElementById("timer");
+    const gameOverDisplay = document.getElementById("game-over");
+
+    const clickSound = document.getElementById("click-sound");
+    const endSound = document.getElementById("end-sound");
 
     let score = 0;
+    let timeLeft = 10;
+    let gameActive = true;
 
     function moveTarget() {
+      if (!gameActive) return;
+
       const r = 20;
       const padding = 10;
       const maxX = 400 - r - padding;
@@ -59,13 +82,31 @@
     }
 
     target.addEventListener("click", () => {
+      if (!gameActive) return;
+
       score++;
       scoreDisplay.textContent = "Score: " + score;
       moveTarget();
+      clickSound.currentTime = 0;
+      clickSound.play();
     });
 
-    // Optional: auto move every few seconds to add challenge
-    setInterval(moveTarget, 2000);
+    const interval = setInterval(() => {
+      timeLeft--;
+      timerDisplay.textContent = "Time Left: " + timeLeft + "s";
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        gameActive = false;
+        gameOverDisplay.style.display = "block";
+        endSound.play();
+      }
+    }, 1000);
+
+    // Optional auto move
+    const autoMove = setInterval(() => {
+      if (gameActive) moveTarget();
+    }, 2000);
   </script>
 
 </body>
