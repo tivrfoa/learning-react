@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import "./Gemini2.5Pro.css";
+import styles from "./Gemini2.5Pro.module.css";
 
 function Square({ value, onSquareClick }) {
   return (
-    <button className="square" onClick={onSquareClick}>
+    <button className={styles.square} onClick={onSquareClick}>
       {value}
     </button>
   );
@@ -167,26 +167,26 @@ export default function Board() {
   const status = winnerInfo ? (winnerInfo.winner === 'Draw' ? 'It\'s a Draw!' : `Winner: ${winnerInfo.winner}`) : `Next player: ${turn}`;
 
   return (
-    <>
-      <div className="status">{status}</div>
-      <div className="board-container"> {/* Added a container for relative positioning of the line */}
-        <div className="board-row">
+    <div className={styles.geminiBody}>
+      <div className={styles.status}>{status}</div>
+      <div className={styles.boardContainer}> {/* Added a container for relative positioning of the line */}
+        <div className={styles.boardRow}>
           <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
           <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
           <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
         </div>
-        <div className="board-row">
+        <div className={styles.boardRow}>
           <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
           <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
           <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
         </div>
-        <div className="board-row">
+        <div className={styles.boardRow}>
           <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
           <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
           <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
         </div>
         {winnerInfo && winnerInfo.line && (
-          <div className="winner-line" style={getLineStyle()}></div>
+          <div className={styles.winnerLine} style={getLineStyle()}></div>
         )}
       </div>
       <button onClick={() => { // Reset button
@@ -195,6 +195,6 @@ export default function Board() {
           setWinnerInfo(null);
           // Reset the global board if you were to keep it, but it's better to remove its direct use.
       }}>Reset Game</button>
-    </>
+    </div>
   );
 }
