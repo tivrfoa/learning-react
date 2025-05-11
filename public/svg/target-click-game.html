@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG Target Click Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 1rem;
+    }
+    svg {
+      background: white;
+      border: 2px solid #ccc;
+      margin-top: 1rem;
+    }
+    #score {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+    }
+    .target {
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .target:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Click the Target!</h1>
+  <p>Click the red circle as many times as you can.</p>
+  <div id="score">Score: 0</div>
+
+  <svg id="game" width="400" height="400" viewBox="0 0 400 400">
+    <circle id="target" class="target" cx="200" cy="200" r="20" fill="red" />
+  </svg>
+
+  <script>
+    const target = document.getElementById("target");
+    const scoreDisplay = document.getElementById("score");
+    const svg = document.getElementById("game");
+
+    let score = 0;
+
+    function moveTarget() {
+      const r = 20;
+      const padding = 10;
+      const maxX = 400 - r - padding;
+      const maxY = 400 - r - padding;
+      const x = Math.floor(Math.random() * (maxX - r)) + r + padding;
+      const y = Math.floor(Math.random() * (maxY - r)) + r + padding;
+
+      target.setAttribute("cx", x);
+      target.setAttribute("cy", y);
+    }
+
+    target.addEventListener("click", () => {
+      score++;
+      scoreDisplay.textContent = "Score: " + score;
+      moveTarget();
+    });
+
+    // Optional: auto move every few seconds to add challenge
+    setInterval(moveTarget, 2000);
+  </script>
+
+</body>
+</html>

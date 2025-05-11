@@ -131,6 +131,7 @@ export default function Game() {
           <li><a href="svg/basic-animation.html">SVG - Basic Animation</a></li>
           <li><a href="svg/stroke-and-fill-animation.html">SVG - Stroke and Fill Animation</a></li>
           <li><a href="svg/star-logo-heart.html">SVG - Star, Logo, Heart Animation</a></li>
+          <li><a href="svg/target-click-game.html">SVG - Target Click Game</a></li>
         </ul>
       </div>
     </>
