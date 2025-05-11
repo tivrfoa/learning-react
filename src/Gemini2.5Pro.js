@@ -154,9 +154,9 @@ export default function Board() {
       case 'diagonal-opposite':
         return {
           ...commonStyle,
-          width: `${Math.sqrt(2) * (squareSize * 3 - 2 * boardPadding - squareSize/3)}px`,
-          top: `${boardPadding + squareSize/6}px`,
-          left: `${squareSize * 3 - boardPadding - squareSize/6}px`, // Adjusted left for opposite diagonal
+          width: `${Math.sqrt(2) * (squareSize * 3 - 2 * boardPadding)}px`,
+          top: `${boardPadding}px`,
+          left: `${squareSize * 3 - boardPadding}px`, // Adjusted left for opposite diagonal
           transform: 'rotate(135deg)',
         };
       default:
