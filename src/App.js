@@ -8,16 +8,46 @@ function Square({ value, onSquareClick }) {
   );
 }
 
+const board = [];
+const rowColumnMap = Array();
+for (let r = 0; r < 3; r++) {
+  board[r] = Array(3);
+  for (let c = 0; c < 3; c++) {
+    rowColumnMap.push([r, c]);
+  }
+}
+console.log(rowColumnMap);
+
+function checkDir(r, c, dr, dc, v) {
+  for (let i = 0; i < 3; i++, r += dr, c += dc) {
+    if (!board[r][c] || board[r][c] !== v) return false;
+  }
+  return true;
+}
+
 export default function Board() {
   const [turn, setTurn] = useState('X');
   const [squares, setSquares] = useState(Array(9).fill(null));
   // The handleClick function creates a copy of the squares array (nextSquares) with the JavaScript slice() Array method. 
   function handleClick(i) {
     if (squares[i] !== null) return;
+    const v = turn;
     const nextSquares = squares.slice();
-    nextSquares[i] = turn;
+    nextSquares[i] = v;
     if (turn === 'X') setTurn('O'); else setTurn('X');
     setSquares(nextSquares);
+    // check winner
+    const [r, c] = rowColumnMap[i];
+    board[r][c] = v;
+    if (checkDir(0, c, 1, 0, v)) {
+      console.log('won vertical');
+    } else if (checkDir(r, 0, 0, 1, v)) {
+      console.log('won horizontal');
+    } else if (checkDir(0, 0, 1, 1, v)) {
+      console.log('won main diagonal');
+    } else if (checkDir(2, 0, -1, 1, v)) {
+      console.log('won opposite diagonal');
+    }
   }
 
   return (
