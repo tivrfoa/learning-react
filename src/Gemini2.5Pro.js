@@ -158,7 +158,6 @@ export default function Board() {
           top: `${boardPadding + squareSize/6}px`,
           left: `${squareSize * 3 - boardPadding - squareSize/6}px`, // Adjusted left for opposite diagonal
           transform: 'rotate(135deg)',
-          transformOrigin: 'top right',
         };
       default:
         return {};
