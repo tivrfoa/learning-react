@@ -117,13 +117,22 @@ export default function Game() {
   });
 
   return (
-    <div className="game">
-      <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+    <>
+      <div className="game">
+        <div className="game-board">
+          <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+        </div>
+        <div className="game-info">
+          <ol>{moves}</ol>
+        </div>
       </div>
-      <div className="game-info">
-        <ol>{moves}</ol>
+      <div id="svg" style={{padding: '20px'}}>
+        <ul>
+          <li><a href="svg/basic-animation.html">SVG - Basic Animation</a></li>
+          <li><a href="svg/stroke-and-fill-animation.html">SVG - Stroke and Fill Animation</a></li>
+          <li><a href="svg/star-logo-heart.html">SVG - Star, Logo, Heart Animation</a></li>
+        </ul>
       </div>
-    </div>
+    </>
   );
 }

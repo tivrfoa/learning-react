@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SVG Animations: Star, Logo, Heart</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f9f9f9;
+      padding: 2rem;
+    }
+
+    svg {
+      display: block;
+      margin: 2rem auto;
+      cursor: pointer;
+    }
+
+    .stroke {
+      fill: transparent;
+      stroke: #007bff;
+      stroke-width: 2;
+      stroke-dasharray: 400;
+      stroke-dashoffset: 400;
+      animation: draw-stroke 2s ease-out forwards;
+    }
+
+    .fill {
+      fill: #007bff;
+      opacity: 0;
+      animation: fill-color 0.5s ease-out 2s forwards;
+    }
+
+    svg:hover .stroke {
+      stroke: #e91e63;
+    }
+
+    svg:hover .fill {
+      fill: #e91e63;
+    }
+
+    @keyframes draw-stroke {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes fill-color {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Animated Star</h2>
+  <svg viewBox="0 0 100 100" width="200" height="200">
+    <polygon class="fill" points="50,5 61,39 98,39 67,60 78,95 50,73 22,95 33,60 2,39 39,39"/>
+    <polygon class="stroke" points="50,5 61,39 98,39 67,60 78,95 50,73 22,95 33,60 2,39 39,39"/>
+  </svg>
+
+  <h2>Animated Logo</h2>
+  <svg viewBox="0 0 500 100" width="300">
+    <text class="fill" x="50" y="70" font-size="60" font-family="Arial" font-weight="bold">MyLogo</text>
+    <text class="stroke" x="50" y="70" font-size="60" font-family="Arial" font-weight="bold">MyLogo</text>
+  </svg>
+
+  <h2>Animated Heart</h2>
+  <svg viewBox="0 0 100 100" width="200" height="200">
+    <path class="fill" d="M50 30 
+                         C35 0, 0 20, 50 80 
+                         C100 20, 65 0, 50 30 Z"/>
+    <path class="stroke" d="M50 30 
+                           C35 0, 0 20, 50 80 
+                           C100 20, 65 0, 50 30 Z"/>
+  </svg>
+
+</body>
+</html>

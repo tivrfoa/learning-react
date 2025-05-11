@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVG Stroke and Fill Animation</title>
+  <style>
+    svg {
+      width: 200px;
+      height: 200px;
+      display: block;
+      margin: 2rem auto;
+      cursor: pointer;
+    }
+
+    .circle {
+      fill: transparent;
+      stroke: #007bff;
+      stroke-width: 5;
+      stroke-dasharray: 314; /* Approximate circumference (2πr, r = 50) */
+      stroke-dashoffset: 314;
+      animation: draw-stroke 2s ease-out forwards;
+    }
+
+    .fill {
+      fill: #007bff;
+      opacity: 0;
+      animation: fill-color 0.5s ease-out 2s forwards; /* Starts after stroke */
+    }
+
+    @keyframes draw-stroke {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes fill-color {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Optional: Interactive effect */
+    svg:hover .circle {
+      stroke: #28a745;
+    }
+
+    svg:hover .fill {
+      fill: #28a745;
+    }
+  </style>
+</head>
+<body>
+
+<svg viewBox="0 0 100 100">
+  <!-- Fill shape (under the stroke) -->
+  <circle class="fill" cx="50" cy="50" r="45"/>
+
+  <!-- Stroke shape (on top) -->
+  <circle class="circle" cx="50" cy="50" r="45"/>
+</svg>
+
+</body>
+</html>
+
