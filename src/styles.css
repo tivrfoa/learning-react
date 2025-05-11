@@ -88,3 +88,39 @@ body {
 .game-info {
   margin-left: 20px;
 }
+
+/* Grok 3 */
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.board {
+  position: relative;
+  width: 150px; /* Adjust as needed */
+  height: 150px; /* Adjust as needed */
+}
+
+.board-row {
+  display: flex;
+}
+
+.square {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  background: white;
+  cursor: pointer;
+}
+
+.win-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Prevents the SVG from blocking clicks */
+}
