@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import "./grok3.css";
 
 function Square({ value, onSquareClick }) {
   return (
