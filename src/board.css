@@ -1,0 +1,32 @@
+.board-container {
+    position: relative;
+  }
+  
+  .board {
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    width: 300px;
+    height: 300px;
+  }
+  
+  .square {
+    font-size: 2rem;
+    border: 1px solid #999;
+    outline: none;
+  }
+  
+  .square.highlight {
+    background-color: rgba(255, 215, 0, 0.5);
+  }
+  
+  .line-overlay line {
+    stroke: red;
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  
+  .status {
+    margin-top: 10px;
+    font-size: 1.5rem;
+  }
+  
