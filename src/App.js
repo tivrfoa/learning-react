@@ -9,11 +9,14 @@ function Square({ value, onSquareClick }) {
 }
 
 export default function Board() {
+  const [turn, setTurn] = useState('X');
   const [squares, setSquares] = useState(Array(9).fill(null));
   // The handleClick function creates a copy of the squares array (nextSquares) with the JavaScript slice() Array method. 
   function handleClick(i) {
+    if (squares[i] !== null) return;
     const nextSquares = squares.slice();
-    nextSquares[i] = "X";
+    nextSquares[i] = turn;
+    if (turn === 'X') setTurn('O'); else setTurn('X');
     setSquares(nextSquares);
   }
 
