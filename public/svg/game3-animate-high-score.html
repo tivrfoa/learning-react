@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG Target Click Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 1rem;
+    }
+
+    svg {
+      background: white;
+      border: 2px solid #ccc;
+      margin-top: 1rem;
+    }
+
+    #score, #timer, #high-score {
+      font-size: 1.5rem;
+      margin: 0.5rem;
+    }
+
+    .target {
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    .target:active {
+      transform: scale(0.95);
+    }
+
+    #game-over {
+      font-size: 2rem;
+      color: red;
+      display: none;
+    }
+
+    #restart-btn {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    @keyframes highScoreFlash {
+        0%   { transform: scale(1); color: gold; }
+        25%  { transform: scale(1.2); color: orange; }
+        50%  { transform: scale(1); color: red; }
+        75%  { transform: scale(1.2); color: orange; }
+        100% { transform: scale(1); color: gold; }
+    }
+
+    .high-score-animate {
+        animation: highScoreFlash 1s ease-in-out;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Click the Target!</h1>
+  <div id="score">Score: 0</div>
+  <div id="high-score">High Score: 0</div>
+  <div id="timer">Time Left: 10s</div>
+  <div id="game-over">⏱ Game Over!</div>
+  <button id="restart-btn">🔁 Restart</button>
+
+  <svg id="game" width="400" height="400" viewBox="0 0 400 400">
+    <circle id="target" class="target" cx="200" cy="200" r="20" fill="red" />
+  </svg>
+
+  <audio id="click-sound" src="/mp3/heartbeat-sfx-320981.mp3" preload="auto"></audio>
+  <audio id="end-sound" src="/mp3/police-sirens-316719.mp3" preload="auto"></audio>
+
+  <script>
+    const target = document.getElementById("target");
+    const scoreDisplay = document.getElementById("score");
+    const timerDisplay = document.getElementById("timer");
+    const highScoreDisplay = document.getElementById("high-score");
+    const gameOverDisplay = document.getElementById("game-over");
+    const restartBtn = document.getElementById("restart-btn");
+
+    const clickSound = document.getElementById("click-sound");
+    const endSound = document.getElementById("end-sound");
+
+    let score = 0;
+    let highScore = localStorage.getItem("svg-high-score") || 0;
+    let timeLeft = 10;
+    let gameActive = true;
+    let timerInterval = null;
+    let autoMoveInterval = null;
+
+    highScoreDisplay.textContent = "High Score: " + highScore;
+
+    function updateScore() {
+      scoreDisplay.textContent = "Score: " + score;
+    }
+
+    function updateHighScore() {
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem("svg-high-score", highScore);
+            highScoreDisplay.textContent = "High Score: " + highScore;
+
+            // Trigger animation
+            highScoreDisplay.classList.remove("high-score-animate"); // Reset
+            void highScoreDisplay.offsetWidth; // Force reflow
+            highScoreDisplay.classList.add("high-score-animate");
+        }
+    }
+
+    function moveTarget() {
+      if (!gameActive) return;
+      const r = 20;
+      const padding = 10;
+      const maxX = 400 - r - padding;
+      const maxY = 400 - r - padding;
+      const x = Math.floor(Math.random() * (maxX - r)) + r + padding;
+      const y = Math.floor(Math.random() * (maxY - r)) + r + padding;
+      target.setAttribute("cx", x);
+      target.setAttribute("cy", y);
+    }
+
+    function endGame() {
+      gameActive = false;
+      clearInterval(timerInterval);
+      clearInterval(autoMoveInterval);
+      gameOverDisplay.style.display = "block";
+      restartBtn.style.display = "inline-block";
+      endSound.play();
+      updateHighScore();
+    }
+
+    function startGame() {
+      // Reset state
+      endSound.pause();
+      endSound.currentTime = 0;
+      score = 0;
+      timeLeft = 10;
+      gameActive = true;
+      updateScore();
+      timerDisplay.textContent = "Time Left: " + timeLeft + "s";
+      gameOverDisplay.style.display = "none";
+      restartBtn.style.display = "none";
+
+      moveTarget();
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = "Time Left: " + timeLeft + "s";
+        if (timeLeft <= 0) endGame();
+      }, 1000);
+
+      autoMoveInterval = setInterval(() => {
+        if (gameActive) moveTarget();
+      }, 2000);
+    }
+
+    // Event listeners
+    target.addEventListener("click", () => {
+      if (!gameActive) return;
+      score++;
+      updateScore();
+      moveTarget();
+      clickSound.currentTime = 0;
+      clickSound.play().catch(err => console.warn("Sound blocked:", err.message));
+      setTimeout(() => {
+        clickSound.pause();
+      }, 2000);
+    });
+
+    restartBtn.addEventListener("click", startGame);
+
+    // Start initially
+    startGame();
+  </script>
+
+</body>
+</html>
