@@ -24,10 +24,11 @@ svg.setAttribute("width", maze[0].length * tileSize);
 svg.setAttribute("height", maze.length * tileSize);
 document.getElementById("container").appendChild(svg);
 
-// Array to track dots
+// Array to track dots and count total dots
 let dots = [];
+let totalDots = 0;
 
-// Draw the maze and dots
+// Draw the maze, dots, and count initial dots
 for (let i = 0; i < maze.length; i++) {
     dots[i] = [];
     for (let j = 0; j < maze[i].length; j++) {
@@ -47,6 +48,7 @@ for (let i = 0; i < maze.length; i++) {
             circle.setAttribute("fill", "white");
             svg.appendChild(circle);
             dots[i][j] = circle;
+            totalDots++; // Count each dot
         }
     }
 }
@@ -147,6 +149,14 @@ const gameInterval = setInterval(() => {
         dots[pacmanRow][pacmanCol] = null;
         score += 10;
         document.getElementById("score").textContent = "Score: " + score;
+        totalDots--; // Decrease dot count
+    }
+
+    // Check for victory
+    if (totalDots <= 0) {
+        gameState = "victory";
+        clearInterval(gameInterval);
+        alert("You Win! Final Score: " + score);
     }
 
     // Move ghosts
