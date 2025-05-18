@@ -16,7 +16,9 @@ const svgNS = "http://www.w3.org/2000/svg";
 // ];
 
 function start() {
-    const maze = generateMaze(20, 20, 0.3);
+    const width = document.getElementById("mazeWidth").value;
+    const height = document.getElementById("mazeHeight").value;
+    const maze = generateMaze(width, height, 0.3);
 
     // Tile size in pixels
     const tileSize = 20;
