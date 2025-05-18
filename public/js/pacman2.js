@@ -14,7 +14,7 @@ const svgNS = "http://www.w3.org/2000/svg";
 //     [1,0,0,0,0,0,0,0,0,1],
 //     [1,1,1,1,1,1,1,1,1,1]
 // ];
-const maze = generateMaze(20, 20);
+const maze = generateMaze(20, 20, 0.3);
 
 // Tile size in pixels
 const tileSize = 20;
@@ -215,16 +215,17 @@ const gameInterval = setInterval(() => {
 
 /**
  * Generates a maze represented by a 2D array of 0s (paths) and 1s (walls).
- * Uses the depth-first search (recursive backtracking) algorithm.
+ * Uses the depth-first search (recursive backtracking) algorithm and optionally adds loops for more connectivity.
  *
  * @param {number} width - Desired width of the maze (will be adjusted to be odd if even).
  * @param {number} height - Desired height of the maze (will be adjusted to be odd if even).
+ * @param {number} [loopProbability=0] - Fraction between 0 and 1 indicating the probability of removing additional walls to create loops (higher = more loops).
  * @returns {number[][]} A 2D array with dimensions height x width, where 1 represents a wall and 0 a path.
  */
-function generateMaze(width, height) {
+function generateMaze(width, height, loopProbability = 0) {
   // Ensure maze dimensions are odd to allow proper carving.
-  if (width % 2 === 0) width += 1;
-  if (height % 2 === 0) height += 1;
+  if (width % 2 === 0) width++;
+  if (height % 2 === 0) height++;
 
   // Initialize grid filled with walls (1).
   const maze = Array.from({ length: height }, () => Array(width).fill(1));
@@ -262,12 +263,37 @@ function generateMaze(width, height) {
     }
   }
 
-  // Start carving from the top-left corner inside the border.
+  // Carve the initial maze starting inside the border.
   carve(1, 1);
+
+  // Optionally add loops by removing random walls between paths.
+  if (loopProbability > 0) {
+    for (let y = 1; y < height - 1; y++) {
+      for (let x = 1; x < width - 1; x++) {
+        if (maze[y][x] === 1) {
+          // count adjacent path cells (N, S, E, W)
+          const neighbors = [
+            maze[y - 1][x],
+            maze[y + 1][x],
+            maze[y][x - 1],
+            maze[y][x + 1]
+          ];
+          const pathCount = neighbors.filter(n => n === 0).length;
+          // If this wall separates two or more path areas, remove it with given probability
+          if (pathCount >= 2 && Math.random() < loopProbability) {
+            maze[y][x] = 0;
+          }
+        }
+      }
+    }
+  }
 
   return maze;
 }
 
 // Example usage:
-const m2 = generateMaze(10, 10);
-console.log(m2);
+// More dead-ends (default):
+// const simpleMaze = generateMaze(15, 15);
+// More loops (50% chance to remove eligible walls):
+// const loopedMaze = generateMaze(15, 15, 0.5);
+// console.log(loopedMaze);
