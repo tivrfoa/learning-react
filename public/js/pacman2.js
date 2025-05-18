@@ -15,7 +15,10 @@ const svgNS = "http://www.w3.org/2000/svg";
 //     [1,1,1,1,1,1,1,1,1,1]
 // ];
 
+let gameInterval;
+
 function start() {
+    clearInterval(gameInterval);
     const width = document.getElementById("mazeWidth").value;
     const height = document.getElementById("mazeHeight").value;
     const maze = generateMaze(width, height, 0.3);
@@ -117,7 +120,7 @@ function start() {
     });
 
     // Game loop
-    const gameInterval = setInterval(() => {
+    gameInterval = setInterval(() => {
         if (gameState !== "playing") return;
 
         // Move Pacman
@@ -191,7 +194,7 @@ function start() {
 
         // Check collisions with ghosts
         ghosts.forEach(ghost => {
-            if (pacmanRow === ghost.row && pacmanCol === ghost.col) {
+            if (lives > 0 && pacmanRow === ghost.row && pacmanCol === ghost.col) {
                 lives--;
                 document.getElementById("lives").textContent = "Lives: " + lives;
                 if (lives <= 0) {
