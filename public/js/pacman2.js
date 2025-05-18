@@ -2,18 +2,19 @@
 const svgNS = "http://www.w3.org/2000/svg";
 
 // Example maze (1 = wall, 0 = path with dot)
-const maze = [
-    [1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,1,0,1,1,1,1,0,1],
-    [1,0,1,0,0,0,0,1,0,1],
-    [1,0,1,0,1,1,0,1,0,1],
-    [1,0,1,0,1,1,0,1,0,1],
-    [1,0,1,0,0,0,0,1,0,1],
-    [1,0,1,0,1,1,1,1,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1]
-];
+// const maze = [
+//     [1,1,1,1,1,1,1,1,1,1],
+//     [1,0,0,0,0,0,0,0,0,1],
+//     [1,0,1,0,1,1,1,1,0,1],
+//     [1,0,1,0,0,0,0,1,0,1],
+//     [1,0,1,0,1,1,0,1,0,1],
+//     [1,0,1,0,1,1,0,1,0,1],
+//     [1,0,1,0,0,0,0,1,0,1],
+//     [1,0,1,0,1,1,1,1,0,1],
+//     [1,0,0,0,0,0,0,0,0,1],
+//     [1,1,1,1,1,1,1,1,1,1]
+// ];
+const maze = generateMaze(20, 20);
 
 // Tile size in pixels
 const tileSize = 20;
@@ -210,3 +211,63 @@ const gameInterval = setInterval(() => {
         }
     });
 }, 200);
+
+
+/**
+ * Generates a maze represented by a 2D array of 0s (paths) and 1s (walls).
+ * Uses the depth-first search (recursive backtracking) algorithm.
+ *
+ * @param {number} width - Desired width of the maze (will be adjusted to be odd if even).
+ * @param {number} height - Desired height of the maze (will be adjusted to be odd if even).
+ * @returns {number[][]} A 2D array with dimensions height x width, where 1 represents a wall and 0 a path.
+ */
+function generateMaze(width, height) {
+  // Ensure maze dimensions are odd to allow proper carving.
+  if (width % 2 === 0) width += 1;
+  if (height % 2 === 0) height += 1;
+
+  // Initialize grid filled with walls (1).
+  const maze = Array.from({ length: height }, () => Array(width).fill(1));
+
+  // Directions for carving: [dx, dy] stepping by 2 cells.
+  const directions = [
+    [0, 2],
+    [0, -2],
+    [2, 0],
+    [-2, 0]
+  ];
+
+  // Fisher–Yates shuffle to randomize carving order.
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  // Recursive function to carve paths.
+  function carve(x, y) {
+    maze[y][x] = 0; // Mark current cell as path.
+    shuffle(directions);
+
+    for (const [dx, dy] of directions) {
+      const nx = x + dx;
+      const ny = y + dy;
+      // Check bounds and whether the target cell is unvisited (still a wall).
+      if (ny > 0 && ny < height && nx > 0 && nx < width && maze[ny][nx] === 1) {
+        // Remove wall between current and next cell.
+        maze[y + dy / 2][x + dx / 2] = 0;
+        carve(nx, ny);
+      }
+    }
+  }
+
+  // Start carving from the top-left corner inside the border.
+  carve(1, 1);
+
+  return maze;
+}
+
+// Example usage:
+const m2 = generateMaze(10, 10);
+console.log(m2);
